@@ -122,6 +122,19 @@ mutation {
 }
 ```
 
+Query example to update a favorite place:
+```graphql
+mutation {
+  updatePlace (
+    placeId: 1,
+    latitude: 0,
+    longitude: 0,
+    description: "description"
+  ) {
+      result
+    }
+}
+
 Query example to delete specific favorite place: 
 ```graphql
 mutation {

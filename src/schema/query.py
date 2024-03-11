@@ -69,14 +69,17 @@ class Query(graphene.ObjectType):
     """
 
     #: запрос для получения списка объектов любимых мест
-    places = graphene.List(Place)
+    places = graphene.List(Place, page=graphene.Int(), size=graphene.Int())
 
     #: запрос для получения конкретного объекта любимого места по идентификатору
     place = Field(Place, place_id=ID(required=True))
 
     @staticmethod
     def resolve_places(
-        parent: Optional[dict], info: ResolveInfo
+        parent: Optional[dict],
+        info: ResolveInfo,
+        page: int | None = None,
+        size: int | None = None,
     ) -> Optional[list[PlaceModel]]:
         """
         Получение списка объектов любимых мест.
@@ -87,8 +90,11 @@ class Query(graphene.ObjectType):
         """
 
         # pylint: disable=unused-argument
-
-        return PlacesService().get_places()
+        if page is None:
+            page = 1
+        if size is None:
+            size = 20
+        return PlacesService().get_places(page=page, size=size)
 
     @staticmethod
     def resolve_place(
